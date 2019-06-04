@@ -1,0 +1,66 @@
+<div class="container">
+	<div class="row">
+		<div class="col-12 text-center" id="title">
+			<h1>To Do List</h1>
+			<h5>“Don't worry...the world won't end today.<br>
+I've put it on my 'To Do' list for tomorrow.”</h5>
+		</div>
+	</div>
+	<div class="row justify-content-between">
+		<div class="col-5 task">
+			<h4>Tasks to be Completed:</h4>
+			{{#each task_data}}
+			{{#unless this.completed}}
+			<div class="row todo justify-content-between">
+				<form class="completed">
+					<input input type="hidden" class="task_id completed" type="text" value={{this.id}}><br>
+					<button type="submit" class="btn-xs btn-success" data-toggle="tooltip" data-placement="left" title="Mark Completed"><i class="fas fa-check"></i></button>
+					<span>{{this.task_string}}
+					</span>
+				</form>
+
+				<form class="delete">
+					<input input type="hidden" class="task_id" type="text" value={{this.id}}><br>
+					<button type="submit" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fas fa-trash-alt"></i></button>
+				</form>
+			</div>
+			{{/unless}}
+			{{/each}}
+		</div>
+
+		<div class="col-5 task">
+			<h4>Completed Tasks:</h4>
+			{{#each task_data}}
+			{{#if this.completed}}
+			<div class="row todo justify-content-between">
+				<form class="undo">
+					<input input type="hidden" class="task_id completed" type="text" value={{this.id}}><br>
+					<button type="submit" class="btn-xs btn-secondary" data-toggle="tooltip" data-placement="left" title="Undo Completed"><i class="fas fa-check"></i></button>
+					<span>{{this.task_string}}
+					</span>
+				</form>
+
+				<form class="delete">
+					<input input type="hidden" class="task_id" type="text" value={{this.id}}><br>
+					<button type="submit" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fas fa-trash-alt"></i></button>
+				</form>
+			</div>
+			{{/if}}
+			{{/each}}
+		</div>
+
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-12 text-center enter_section">
+			<p>Add new task:</p>
+			<form action="/tasks/create" method="POST">
+				<input type="text" class="form-control" name="task_string" value="" id="enter_text">
+				<button type="submit" class="btn btn-primary" id="text-enter-button">Submit</button>
+			</form>
+		</div>
+	</div>
+</div>

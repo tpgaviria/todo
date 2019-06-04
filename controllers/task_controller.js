@@ -1,61 +1,44 @@
 var express = require("express");
-
 var router = express.Router();
-
-// Import the model (cat.js) to use its database functions.
 var task = require("../models/task.js");
 
-// Create all our routes and set up logic within those routes where required.
-router.get("/", function(req, res) {
-  task.all(function(data) {
-    var hbsObject = {
-      tasks: data
-    };
-    console.log(hbsObject);
-    res.render("index", hbsObject);
-  });
+router.get("/", function (req, res) {
+    res.redirect('/tasks');
 });
 
-router.post("/api/tasks", function(req, res) {
-  task.create([
-    "task", "complete"
-  ], [
-    req.body.name, req.body.sleepy
-  ], function(result) {
-    // Send back the ID of the new quote
-    res.json({ id: result.insertId });
-  });
+router.get('/tasks', function (req, res) {
+    task.all(function (data) {
+        res.render('index', { task_data: data })
+    })
+})
+
+router.post("/tasks/create", function (req, res) {
+    task.create(req.body.task_string, function (result) {
+        console.log(result);
+        res.redirect("/");
+    });
 });
 
-router.put("/api/tasks/:id", function(req, res) {
-  var condition = "id = " + req.params.id;
+router.put("/tasks/:id", function (req, res) {
+    task.update(req.params.id, function (result) {
+        console.log(result);
+        res.sendStatus(200);
+    });
+});
 
-  console.log("condition", condition);
+router.post("/tasks/:id", function (req, res) {
+    task.undo(req.params.id, function (result) {
+        console.log(result);
+        res.sendStatus(200);
+    });
+});
 
-  task.update({
-    complete: req.body.complete
-  }, condition, function(result) {
-    if (result.changedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
+router.delete("/tasks/:id", function (req, res) {
+    task.delete(req.params.id, function (result) {
+        console.log(result);
+        res.sendStatus(200);
     }
-  });
+    )
 });
 
-router.delete("/api/tasks/:id", function(req, res) {
-  var condition = "id = " + req.params.id;
-
-  task.delete(condition, function(result) {
-    if (result.affectedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
-    }
-  });
-});
-
-// Export routes for server.js to use.
 module.exports = router;
