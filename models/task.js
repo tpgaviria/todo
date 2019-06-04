@@ -1,5 +1,7 @@
+// imports ORM
 var orm = require("../config/orm.js");
 
+// creates object with methods - uses ORM and controller to manipulate database table
 var task = {
   all: function(cb) {
     orm.all("tasks", function(res) {
@@ -33,4 +35,5 @@ var task = {
   }
 };
 
+// exports task object for use in controller
 module.exports = task;

@@ -1,12 +1,15 @@
+// test verifying file is loaded and running
 console.log('script loaded');
 
+// bootstrap function to initiate hover tooltips
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
-$(document).ready(function () {
 
+$(document).ready(function () {
   
+  // when "completed" checkbox is clicked, ajax method "PUT" updates database and reloads
   $(".completed").on("submit", function (event) {
     event.preventDefault();
 
@@ -20,6 +23,7 @@ $(document).ready(function () {
     })
   });
   
+  // when "undo" box is clicked, ajax method "POST" updates database and reloads
   $(".undo").on("submit", function (event) {
     event.preventDefault();
 
@@ -33,7 +37,7 @@ $(document).ready(function () {
     })
   });
 
-
+  // when "delete" box is clicked, ajax method "DELETE" updates database and reloads
   $(".delete").on("submit", function (event) {
     event.preventDefault();
 

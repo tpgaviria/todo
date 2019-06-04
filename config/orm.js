@@ -1,5 +1,7 @@
+// imports mysql connection to make mysql queries
 var connection = require("../config/connection.js");
 
+// helper to create number of questions marks needed in mysql query
 function printQuestionMarks(num) {
     var arr = [];
     for (var i = 0; i < num; i++) {
@@ -8,7 +10,7 @@ function printQuestionMarks(num) {
     return arr.toString();
 }
 
-
+// converts object into mysql query
 function objToSql(ob) {
     var arr = [];
     for (var key in ob) {
@@ -20,11 +22,13 @@ function objToSql(ob) {
             arr.push(key + "=" + value);
         }
     }
-
     return arr.toString();
 }
 
+// object relational mapping (ORM) to use throughout app, easier to create mysql queries
 var orm = {
+
+    // shows all parts of a table
     all: function (tableInput, cb) {
         var queryString = "SELECT * FROM " + tableInput + ";";
         connection.query(queryString, function (err, result) {
@@ -34,13 +38,14 @@ var orm = {
             cb(result);
         });
     },
+
+    // creates a new item in the table
     create: function (table, cols, vals, cb) {
         var queryString = "INSERT INTO " + table;
 
         queryString += " (";
         queryString += cols.toString();
-        queryString += ") ";
-        queryString += "VALUES (";
+        queryString += ") VALUES (";
         queryString += printQuestionMarks(vals.length);
         queryString += ") ";
 
@@ -50,11 +55,11 @@ var orm = {
             if (err) {
                 throw err;
             }
-
             cb(result);
         });
     },
 
+    // updates/changes a value for an item in the table
     update: function (table, objColVals, condition, cb) {
         var queryString = "UPDATE " + table;
 
@@ -68,10 +73,11 @@ var orm = {
             if (err) {
                 throw err;
             }
-
             cb(result);
         });
     },
+
+    // deletes an item from a table
     delete: function (table, condition, cb) {
         var queryString = "DELETE FROM " + table;
 
@@ -83,10 +89,10 @@ var orm = {
             if (err) {
                 throw err;
             }
-
             cb(result);
         });
     }
 };
 
+// exports ORM for use in model
 module.exports = orm;
