@@ -5,7 +5,7 @@ var exphbs = require("express-handlebars");
 var app = express();
 
 // sets local host port number
-var PORT = 8080;
+var PORT = process.env.PORT || 8080;
 
 // allows use of static file in 'public' directory
 app.use(express.static("public"));
